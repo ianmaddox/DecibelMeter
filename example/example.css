@@ -5,6 +5,25 @@
 body {
 	background-color: #222;
 	font-size: 16dppx;
+	-webkit-transition: background-color 5s linear;
+}
+
+body.alert {
+	background-color: #F00;
+	-webkit-transition: background-color 0.5s linear;
+}
+
+#notice {
+	color: #222;
+	font-family: impact, sans-sans-serif;
+	font-weight: bolder;
+	font-size: 10em;
+
+	display: block;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	padding-top: 10%;
 }
 
 #meter {

@@ -3,66 +3,76 @@
 <head>
     <meta charset="utf-8">
     <title>DecibelMeter example</title>
-    
+
     <link rel="stylesheet" href="font/decibel-meter/style.css">
     <link rel="stylesheet" href="example.css">
 </head>
 
-<body>
+<body id="body">
 
-<div id="message">Click mic to toggle listening</div>
-
+<div id="notice">High volume alert!</div>
 <div id="meter" class="icon-microphone"><span></span></div>
 
 <script src="../build/decibel-meter.js"></script>
 
 <script>
 
+  loudThresh = 33;
 	// HTML elements
-	
 	var meterEl = document.getElementById('meter'),
-		levelEl = document.querySelector('#meter > span');
-	
-	
+		levelEl = document.querySelector('#meter > span'),
+    body = document.getElementById('body');
+
+
 	// Decibel Meter
-	
+
 	var meter = DecibelMeter.create('meter');
-	
+
 	// listen for audio sources to be ready
-	
-	meter.on('ready', function (meter, sources) {
+
+  meter.on('ready', function (meter, sources) {
 		var mic = sources[0]; // select first mic
 		meter.connect(mic); // connect to mic
 	});
-	
+
+  meter.on('connect', function (meter) {
+    console.log("WAT");
+    meter.listen();
+	});
+
 	// adjust displayed level when audio sampled
-	
+
 	meter.on('sample', function (dB, percent, level) {
 		levelEl.style.height = (percent * 100) + '%';
+    if((percent * 100) > loudThresh) {
+      body.classList.add('alert');
+      console.log("LOUD!")
+    } else {
+      body.classList.remove('alert');
+    }
 	});
-	
+
 	// change element class when meter starts listening
-	
+
 	meter.on('listen', function (meter) {
 		meterEl.classList.add('active');
 	});
-	
+
 	// change element class when meter stops listening
-	
+
 	meter.on('stop-listening', function (meter) {
 		meterEl.classList.remove('active');
 		levelEl.style.height = 0;
 	});
-	
+
 	// clicking the meter element will toggle listening
-	
+
 	meterEl.addEventListener('click', function (e) {
 		if (meter.listening)
 			meter.stopListening();
 		else
 			meter.listen();
 	});
-
 </script>
 </body>
 </html>
