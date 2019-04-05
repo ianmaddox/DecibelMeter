@@ -9,9 +9,22 @@
 </head>
 
 <body id="body">
+<center id="link">go/db-meter?level=<span id=level></span></center>
 
 <div id="notice">High volume alert!</div>
 <div id="meter" class="icon-microphone"><span></span></div>
+<link href="https://fonts.googleapis.com/css?family=Catamaran:900|Kanit:900|Work+Sans:900" rel="stylesheet">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-168906-17"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-168906-17');
+</script>
 
 <script src="decibel-meter.js"></script>
 
@@ -19,12 +32,13 @@
   var urlParams = new URLSearchParams(window.location.search);
   var lvl =  urlParams.get('level');
   var loudThresh = lvl ? lvl : 50;
+
   console.log("Alert threshold set to " + loudThresh + "%");
 	// HTML elements
 	var meterEl = document.getElementById('meter'),
 		levelEl = document.querySelector('#meter > span'),
-    body = document.getElementById('body');
-
+  body = document.getElementById('body');
+  document.getElementById('level').innerHTML = loudThresh + "";
 
 	// Decibel Meter
 
@@ -35,6 +49,7 @@
   meter.on('ready', function (meter, sources) {
 		var mic = sources[0]; // select first mic
 		meter.connect(mic); // connect to mic
+    body.classList.add('loaded');
 	});
 
   meter.on('connect', function (meter) {
